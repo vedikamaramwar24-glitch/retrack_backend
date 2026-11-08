@@ -1,6 +1,7 @@
-
+const dashboardRoutes = require('./routes/dashboard.routes');
 require('dotenv').config();
-
+const authRoutes = require('./routes/auth.routes');
+const certificateRoutes = require('./routes/certificates.routes');
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -12,6 +13,10 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(helmet());
+app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/certificates', certificateRoutes);
+
 
 // 1. Health API
 app.get('/api/health', (req, res) => {
@@ -42,31 +47,10 @@ app.get('/api/db-test', async (req, res) => {
     }
 });
 
-// 3. Dashboard API
-app.get('/api/dashboard', (req, res) => {
-    const brandId = req.query.brandId;
 
-    res.json({
-        status: "success",
-        brandId: brandId,
-        totalCertificates: 10,
-        totalRecycled: 250,
-        recyclingTarget: 500,
-        message: "Dashboard data fetched successfully!"
-    });
-});
 
-// 4. Certificate Verification API
-app.post('/api/certificates/verify', (req, res) => {
-    const certificateId = req.body.certificateId;
 
-    res.json({
-        status: "success",
-        certificateId: certificateId,
-        verificationStatus: "verified",
-        message: "Certificate verified successfully!"
-    });
-});
+
 
 // 5. Target Prediction API
 app.post('/api/predict-target', (req, res) => {
